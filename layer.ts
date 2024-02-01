@@ -44,6 +44,7 @@ export default class Layer {
         return arrayOfNeurons
     }
 
+    // TODO Comment about what/why
     private generateSmallNonzeroValue() {
         const numberNearZero = 2 * Math.random() - 1
         const nonZeroNumber = numberNearZero === 0 ? 1 : numberNearZero
