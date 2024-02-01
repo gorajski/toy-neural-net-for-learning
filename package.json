@@ -1,0 +1,15 @@
+{
+  "name": "toy-neural-net-for-learning",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "scripts": {
+    "test": "vitest"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "vitest": "^1.2.2"
+  }
+}

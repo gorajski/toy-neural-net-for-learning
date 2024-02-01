@@ -1,4 +1,5 @@
-import Neuron from "../neuron"
+import { describe, it, expect } from 'vitest'
+import Neuron from "./neuron"
 
 describe("Neuron", function() {
     describe("constructor", function () {
