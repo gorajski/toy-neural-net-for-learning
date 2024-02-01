@@ -1,9 +1,9 @@
-type ActFunc = (n: number) => number;
+import { ActFunc } from './types'
 
 export default class Neuron {
-    actFunc: ActFunc;
-    weights: number[];
-    bias: number;
+    actFunc: ActFunc
+    weights: number[]
+    bias: number
 
     constructor(actFunc: ActFunc, initialWeights: number[], bias: number) {
         this.actFunc = actFunc
