@@ -23,7 +23,11 @@ export default class Layer {
         this.inputBuffer = inputs
     }
 
-    private initializeNeurons(activationFunction: ActFunc, neuronCount: number, inputBufferSize: number): Neuron[] {
+    private initializeNeurons(
+        activationFunction: ActFunc,
+        neuronCount: number,
+        inputBufferSize: number
+    ): Neuron[] {
         let arrayOfNeurons: Neuron[] = []
         for (let i = 0; i < neuronCount; i++) {
             let arrayOfWeights: number[] = []
