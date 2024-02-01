@@ -48,18 +48,15 @@ describe("Neuron", function() {
         })
 
         describe("assuming the activation function is the identity function", function() {
-            const identityFunction = (weightedSum: number) :number => { return weightedSum }
+            const identityFunction = (weightedSum: number): number => { return weightedSum }
 
-            it("returns length of input array when all the inputs and weights are 1.0 and bias is 0.0", function() {
-                // Since the product of each input-and-weight pair will be 1.0, then each pair will contribute 1.0 to the overall sum.
-                // Therefore, this is a special case where the sum will simply be the count of all pairs.
-                // In the end, this might be too clever, but it does validate the contribution of each pair.
-                const inputs: number[] = [1.0, 1.0, 1.0]
-                const weights: number[] = [1.0, 1.0, 1.0]
-                const bias: number = 0
+            it("produces a linear combination of weights and inputs", function() {
+                const inputs: number[] = [2.0, 3.0, 5.0]
+                const weights: number[] = [7.0, 11.0, 13.0]
+                const bias: number = 17
 
                 const neuron: Neuron = new Neuron(identityFunction, weights, bias)
-                expect(neuron.eval(inputs)).toBe(inputs.length)
+                expect(neuron.eval(inputs)).toBe(129)
             })
 
             it("returns 0.5 when all the inputs are 1.0, and any single weight is 0.5 while the rest are 0 and the bias is 0", function() {
@@ -91,7 +88,9 @@ describe("Neuron", function() {
         })
 
         describe("assuming the activation function is the unit step function", function() {
-            const stepFunction = (weightedSum: number) :number => { return weightedSum >= 0 ? 1 : 0 }
+            const stepFunction = (weightedSum: number): number => {
+                return weightedSum >= 0 ? 1 : 0
+            }
 
             it("returns 1.0 when all the inputs and weights are 1.0 and bias is 0.0", function() {
                 const inputs: number[] = [1.0, 1.0, 1.0]
@@ -127,6 +126,16 @@ describe("Neuron", function() {
 
                 const neuron: Neuron = new Neuron(stepFunction, weights, bias)
                 expect(neuron.eval(inputs)).toBe(1.0)
+            })
+        })
+
+        describe("When activation func returns zero", function() {
+            it("returns 0 always", function() {
+                const inputs = [Math.random(), Math.random(), Math.random()]
+                const weights = [Math.random(), Math.random(), Math.random()]
+                const bias = Math.random()
+                const neuron: Neuron = new Neuron(() => 0, weights, bias)
+                expect(neuron.eval(inputs)).toBe(0)
             })
         })
     })
