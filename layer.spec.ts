@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import Layer from './layer'
-import Neuron from "./neuron";
+import Neuron from "./neuron"
 
 describe("Layer", function() {
     describe("constructor", function () {

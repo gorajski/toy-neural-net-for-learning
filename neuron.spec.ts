@@ -10,18 +10,18 @@ describe("Neuron", function() {
 
             expect(typeof neuron.actFunc).toBe("function")
             expect(neuron.actFunc(Math.random())).toBe(0.7)
-        });
+        })
 
         it("accepts an array of float values between 0 and 1 for initial weights", function() {
             const initialWeights = [1, 0.5, 0]
             const neuron = new Neuron((n: number) => n, initialWeights, 4.3)
             expect(neuron.weights).toEqual(initialWeights)
-        });
+        })
 
         it("accepts a float value for bias", function() {
             const neuron = new Neuron((n: number) => n, [], 4.3)
             expect(neuron.bias).toEqual(4.3)
-        });
+        })
 
         // defaults for weights and bias if none provided??
     })
@@ -138,4 +138,4 @@ describe("Neuron", function() {
             })
         })
     })
-});
+})
