@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "test": "vitest"
+    "test": "vitest",
+    "start": "ts-node main.ts"
   },
   "author": "",
   "license": "ISC",
