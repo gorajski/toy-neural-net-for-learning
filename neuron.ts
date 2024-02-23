@@ -15,7 +15,7 @@ export default class Neuron {
   eval(inputs: number[]) {
     // TODO Validate that inputs.length is same as weights.length
     const weightedSumOfInputs = this.weightedSumOfInputs(inputs);
-    return this.actFunc(weightedSumOfInputs + this.bias);
+    return this.actFunc(weightedSumOfInputs);
   }
 
   weightedSumOfInputs(inputs: number[]): number {
@@ -24,7 +24,7 @@ export default class Neuron {
         acc + (weight * inputs[index])
       ),
       0,
-    );
+    ) + this.bias;
   }
 
   /** See img/math.jpg for the math of what's going on here */
