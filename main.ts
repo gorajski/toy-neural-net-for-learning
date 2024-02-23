@@ -4,7 +4,7 @@ const neuron = new Neuron(activationFunction, [
   Math.random(),
   Math.random(),
   Math.random(),
-], -5);
+], -0.1);
 const trainingData = [
   {
     inputs: [-1, -1, -1],
@@ -12,7 +12,7 @@ const trainingData = [
   },
   {
     inputs: [1, -1, -1],
-    desiredOutput: 1,
+    desiredOutput: -1,
   },
   {
     inputs: [-1, 1, -1],
@@ -28,7 +28,7 @@ const trainingData = [
   },
   {
     inputs: [1, -1, 1],
-    desiredOutput: -1,
+    desiredOutput: 1,
   },
   {
     inputs: [1, 1, -1],
@@ -36,10 +36,10 @@ const trainingData = [
   },
   {
     inputs: [1, 1, 1],
-    desiredOutput: -1,
+    desiredOutput: 1,
   },
 ];
-for (let i = 0; i < 100000; i++) {
+for (let i = 0; i < 1000000; i++) {
   trainingData.forEach((data) => {
     neuron.update(data.inputs, data.desiredOutput);
   });
