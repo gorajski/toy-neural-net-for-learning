@@ -53,15 +53,12 @@ export default class Neuron {
     return gradientArray;
   }
 
-  /** Modifies local neuron weights */
-  updateWeights(gradientArray: number[]) {
-    gradientArray.forEach((gradient, index) => {
-      this.weights[index] -= gradient * 0.1;
-    });
-  }
-
   update(inputs: number[], desiredOutput: number) {
     const gradientArray = this.backprop(inputs, desiredOutput);
-    this.updateWeights(gradientArray);
+    const [biasGradient, ...weightGradientArray] = gradientArray;
+    this.bias -= biasGradient * 0.1;
+    weightGradientArray.forEach((gradient, index) => {
+      this.weights[index] -= gradient * 0.1;
+    });
   }
 }
