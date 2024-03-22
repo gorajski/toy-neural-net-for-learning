@@ -1,25 +1,8 @@
+const LEARNING_RATE: f64 = 0.1;
+
 fn main() {
-    let mut hidden_layer = Layer {
-        neurons: vec![
-            Neuron {
-                weights: vec![1.0, 1.0],
-                bias: 1.0,
-            },
-            Neuron {
-                weights: vec![1.0, 1.0],
-                bias: 1.0,
-            },
-        ],
-    };
-
-    let mut output_layer = Layer {
-        neurons: vec![Neuron {
-            weights: vec![1.0, 1.0],
-            bias: 1.0,
-        }],
-    };
-
-    const LEARNING_RATE: f64 = 0.1;
+    // get hidden and output layer from setup function
+    let (mut hidden_layer, mut output_layer) = setup();
 
     // TODO let's just get this working and then make it look nice, l0l
     // Define some example training data for basic logic gates
@@ -32,25 +15,63 @@ fn main() {
     let targets = vec![vec![0.0], vec![1.0], vec![1.0], vec![0.0]];
 
     // Train the model using the example data
-    for _ in 0..1 {
-        for i in 0..inputs.len() {
-            backprop(
-                &inputs[i],
-                &targets[i],
-                &mut hidden_layer,
-                &mut output_layer,
-                LEARNING_RATE,
-            )
-        }
-    }
+    train_network(&inputs, targets, &mut hidden_layer, &mut output_layer);
 
-    println!("{:?}, {:?}", hidden_layer, output_layer);
+    println!("Training Result: {:?}, {:?}", hidden_layer, output_layer);
 
     // Flex it!
     for input in inputs {
         let prediction = predict(&input, &hidden_layer, &output_layer);
         println!("prediction for {:?}: {}", input, prediction)
     }
+}
+
+fn train_network(
+    inputs: &Vec<Vec<f64>>,
+    targets: Vec<Vec<f64>>,
+    hidden_layer: &mut Layer,
+    output_layer: &mut Layer,
+) {
+    let iterations = 2;
+    for _ in 0..iterations {
+        for i in 0..inputs.len() {
+            backprop(
+                &inputs[i],
+                &targets[i],
+                hidden_layer,
+                output_layer,
+                LEARNING_RATE,
+            );
+            println!(
+                "Backprop result {}: {:?}, {:?}",
+                i, hidden_layer, output_layer
+            );
+        }
+    }
+}
+
+fn setup() -> (Layer, Layer) {
+    let hidden_layer = Layer {
+        neurons: vec![
+            Neuron {
+                weights: vec![1.0, 1.0],
+                bias: 1.0,
+            },
+            Neuron {
+                weights: vec![1.0, 1.0],
+                bias: 1.0,
+            },
+        ],
+    };
+
+    let output_layer = Layer {
+        neurons: vec![Neuron {
+            weights: vec![1.0, 1.0],
+            bias: 1.0,
+        }],
+    };
+
+    (hidden_layer, output_layer)
 }
 
 #[derive(Debug)]
@@ -70,8 +91,8 @@ impl Neuron {
     //     sum + self.bias
     // }
 
-    fn eval(&self, input: &Vec<f64>) -> f64 {
-        let dot_product = dot_product(&self.weights, &input);
+    fn eval(&self, inputs: &Vec<f64>) -> f64 {
+        let dot_product = dot_product(&self.weights, &inputs);
         let weighted_sum = dot_product + self.bias;
         sigmoid(weighted_sum)
     }
@@ -83,7 +104,11 @@ struct Layer {
 }
 
 fn predict(input: &Vec<f64>, hidden_layer: &Layer, output_layer: &Layer) -> f64 {
-    let hidden_outputs: Vec<f64> = hidden_layer.neurons.iter().map(|neuron| neuron.eval(input)).collect();
+    let hidden_outputs: Vec<f64> = hidden_layer
+        .neurons
+        .iter()
+        .map(|neuron| neuron.eval(input))
+        .collect();
     output_layer.neurons[0].eval(&hidden_outputs)
 }
 
@@ -147,10 +172,10 @@ fn backprop(
             .weights
             .iter()
             .enumerate()
-            .map(|(j, weight)| weight + learning_rate * output_error * hidden_outputs[j])
+            .map(|(j, weight)| weight + (learning_rate * output_error * hidden_outputs[j]))
             .collect();
 
-        neuron.bias += learning_rate * output_error;
+        // neuron.bias += learning_rate * output_error;
     }
 
     // Update the weights and biases of the hidden layer
