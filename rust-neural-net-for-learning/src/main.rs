@@ -32,7 +32,7 @@ fn train_network(
     hidden_layer: &mut Layer,
     output_layer: &mut Layer,
 ) {
-    let iterations = 2;
+    let iterations = 1000;
     for _ in 0..iterations {
         for i in 0..inputs.len() {
             backprop(
@@ -54,20 +54,20 @@ fn setup() -> (Layer, Layer) {
     let hidden_layer = Layer {
         neurons: vec![
             Neuron {
-                weights: vec![1.0, 1.0],
-                bias: 1.0,
+                weights: vec![0.5, 0.5],
+                bias: 0.0,
             },
             Neuron {
-                weights: vec![1.0, 1.0],
-                bias: 1.0,
+                weights: vec![0.5, 0.5],
+                bias: 0.0,
             },
         ],
     };
 
     let output_layer = Layer {
         neurons: vec![Neuron {
-            weights: vec![1.0, 1.0],
-            bias: 1.0,
+            weights: vec![0.5, 0.5],
+            bias: 0.0,
         }],
     };
 
@@ -153,13 +153,13 @@ fn backprop(
             let output_weighted_sum = output_layer.neurons[0]
                 .weights
                 .iter()
-                .fold(0.0, |acc, weight| acc + weight * output_error);
+                .fold(0.0, |acc, weight| acc + (weight * output_error));
 
             let hidden_layer_weighted_sum = neuron
                 .weights
                 .iter()
                 .enumerate()
-                .fold(0.0, |acc, (i, weight)| acc + weight * inputs[i])
+                .fold(0.0, |acc, (i, weight)| acc + (weight * inputs[i]))
                 + neuron.bias;
 
             output_weighted_sum * signmoid_derivative(sigmoid(hidden_layer_weighted_sum))
@@ -175,7 +175,7 @@ fn backprop(
             .map(|(j, weight)| weight + (learning_rate * output_error * hidden_outputs[j]))
             .collect();
 
-        // neuron.bias += learning_rate * output_error;
+        neuron.bias += learning_rate * output_error;
     }
 
     // Update the weights and biases of the hidden layer
@@ -184,8 +184,10 @@ fn backprop(
             .weights
             .iter()
             .enumerate()
-            .map(|(j, weight)| weight + learning_rate * hidden_errors[i] * inputs[j])
+            .map(|(j, weight)| weight + (learning_rate * hidden_errors[i] * inputs[j]))
             .collect();
+
+        neuron.bias += learning_rate * hidden_errors[i];
     }
 }
 
