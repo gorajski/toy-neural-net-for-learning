@@ -4,8 +4,7 @@ fn main() {
     // get hidden and output layer from setup function
     let (mut hidden_layer, mut output_layer) = setup();
 
-    // TODO let's just get this working and then make it look nice, l0l
-    // Define some example training data for basic logic gates
+    // XOR
     let inputs = vec![
         vec![0.0, 0.0],
         vec![0.0, 1.0],
@@ -15,24 +14,24 @@ fn main() {
     let targets = vec![vec![0.0], vec![1.0], vec![1.0], vec![0.0]];
 
     // Train the model using the example data
-    train_network(&inputs, targets, &mut hidden_layer, &mut output_layer);
+    train_network(&inputs, &targets, &mut hidden_layer, &mut output_layer);
 
     println!("Training Result: {:?}, {:?}", hidden_layer, output_layer);
 
     // Flex it!
-    for input in inputs {
+    for (i, input) in inputs.iter().enumerate() {
         let prediction = predict(&input, &hidden_layer, &output_layer);
-        println!("prediction for {:?}: {}", input, prediction)
+        println!("prediction for {:?}: {}, target: {:?}", input, prediction, &targets[i]);
     }
 }
 
 fn train_network(
     inputs: &Vec<Vec<f64>>,
-    targets: Vec<Vec<f64>>,
+    targets: &Vec<Vec<f64>>,
     hidden_layer: &mut Layer,
     output_layer: &mut Layer,
 ) {
-    let iterations = 1000;
+    let iterations = 1000000;
     for _ in 0..iterations {
         for i in 0..inputs.len() {
             backprop(
@@ -42,10 +41,10 @@ fn train_network(
                 output_layer,
                 LEARNING_RATE,
             );
-            println!(
-                "Backprop result {}: {:?}, {:?}",
-                i, hidden_layer, output_layer
-            );
+            // println!(
+            //     "Backprop result {}: {:?}, {:?}",
+            //     i, hidden_layer, output_layer
+            // );
         }
     }
 }
@@ -81,16 +80,6 @@ struct Neuron {
 }
 
 impl Neuron {
-    // fn activate(&self, inputs: &Vec<f64>) -> f64 {
-    //     let sum: f64 = self
-    //         .weights
-    //         .iter()
-    //         .zip(inputs.iter())
-    //         .map(|(w, i)| w * i)
-    //         .sum();
-    //     sum + self.bias
-    // }
-
     fn eval(&self, inputs: &Vec<f64>) -> f64 {
         let dot_product = dot_product(&self.weights, &inputs);
         let weighted_sum = dot_product + self.bias;
